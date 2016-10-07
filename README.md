@@ -1,2 +1,2 @@
 # lilwebserver
-Sometimes a tiny, instantly usable Web server is handy to have
+Sometimes a tiny, fast, instantly available Web server for serving a directory of files is handy to have.
