@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path"
 	"strconv"
-	"strings"
 )
 
 func main() {
@@ -25,19 +23,10 @@ func main() {
 		}
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		filePath := path.Clean(r.URL.Path)
-		filePath = strings.TrimPrefix(filePath, "/")
-		filePath = strings.TrimPrefix(filePath, "..")
-		filePath = path.Join(workingDir, filePath)
-
-		fmt.Printf("%s\n", filePath)
-
-		http.ServeFile(w, r, filePath)
-	})
+	handler := http.FileServer(http.Dir(workingDir))
 
 	fmt.Printf("Serving %s on port %d...\n", workingDir, port)
-	err := http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	err := http.ListenAndServe(":"+strconv.Itoa(port), handler)
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 	}
